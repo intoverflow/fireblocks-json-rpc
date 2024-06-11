@@ -42,12 +42,15 @@ async function createServer(this: any, config: ServerConfig): Promise<{ server: 
     const fireblocksProvider = new FireblocksWeb3Provider(web3ProviderConfig)
 
     function receiveRequest(jsonRpcRequest: any, exteernalResponseCallback: (response: any) => void) {
+        if (jsonRpcRequest.params && jsonRpcRequest.params[0].chainId) {
+            jsonRpcRequest.params[0].chainId = parseInt(jsonRpcRequest.params[0].chainId, 16).toString();
+        }
         debug("Received request", jsonRpcRequest)
 
         const responseCallback = (response: any) => {
             if (jsonRpcRequest.method == "eth_chainId") {
                 debug("eth_chainId detected");
-                response.result = parseInt(response.result, 16);
+                response.result = parseInt(response.result, 16).toString();
             }
 
             debug("Sending response", response)
