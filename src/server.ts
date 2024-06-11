@@ -46,6 +46,7 @@ async function createServer(this: any, config: ServerConfig): Promise<{ server: 
 
         const responseCallback = (response: any) => {
             if (jsonRpcRequest.method == "eth_chainId") {
+                debug("eth_chainId detected");
                 response.result = parseInt(response.result, 16);
             }
 
